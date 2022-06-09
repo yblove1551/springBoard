@@ -107,14 +107,12 @@ public class MailController{
 											@RequestParam String email) throws Exception{
 		removeTimeOut();
 		JSONObject json = new JSONObject();
-		if (!findByEmailAndAuthNum(email, authNumber)) {
-			json.put("isSuccess", "N");
-			return new ResponseEntity<>(json.toString(), HttpStatus.BAD_REQUEST);
+		json.put("isSuccess", "N");	
+		if (findByEmailAndAuthNum(email, authNumber)) {
+			removeByEmail(email);
+			json.put("isSuccess", "Y");	
 		}
-	
-					
-		removeByEmail(email);
-		json.put("isSuccess", "Y");
+		
 		return new ResponseEntity<>(json.toString(), HttpStatus.OK);
 	
 	}
@@ -185,8 +183,10 @@ public class MailController{
 	}
 	
 	public void removeTimeOut() {
+		System.out.println("mailSet delete before=" + mailAuthSet);
 		Long currentTime = System.currentTimeMillis(); 
 		mailAuthSet.removeIf(s -> currentTime - s.getCreateTime() > 1000 * 60 * 5); //5분	
+		System.out.println("mailSet delete after=" + mailAuthSet);
 	}
 	
 	public void removeByEmail(String email) {

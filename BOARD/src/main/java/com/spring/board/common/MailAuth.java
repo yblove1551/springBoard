@@ -32,6 +32,13 @@ public class MailAuth {
 		this.createTime = createTime;
 	}
 
+	
+	
+	@Override
+	public String toString() {
+		return "MailAuth [email=" + email + ", authNumber=" + authNumber + ", createTime=" + createTime + "]";
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(authNumber, email);

@@ -96,13 +96,13 @@
 			<input type="radio" name="radio_type" value="pw" >비밀번호
 		</div>
 		<label for="email">이메일</label>
-		<input class="input-field" type="text" name="email" id="email" placeholder="본인확인 이메일을 입력해주세요."> 		
+		<input class="input-field" type="text" name="email" id="email" placeholder="본인확인 이메일을 입력해주세요." autocomplete="off"> 		
 		<label for="name">이름</label>
-		<input class="input-field" type="text" name="name" id="name" placeholder="이름을 입력해주세요.">		
+		<input class="input-field" type="text" name="name" id="name" placeholder="이름을 입력해주세요." autocomplete="off">		
 		
 		<div id="email-Auth" style="display:none;">
-			<input type="text" name="emailAuthNum" id="emailAuthNum">
-			<input type="button" id="btnEmailAuth" name="btnEmailAuth" value="확인">
+			<input type="text" name="emailAuthNum" id="emailAuthNum" autocomplete="off">
+			<input type="button" id="btnEmailAuth" name="btnEmailAuth" value="확인" autocomplete="off">
 		</div>
 		
 		<input type="hidden" id="id" value="">

@@ -89,6 +89,7 @@ public class ReplyController{
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Content-Type", "application/json; charset=UTF-8");	
 		
+		System.out.println(reply);
 		if (reply.getBno() == null) {
 			json.put("msg", "잘못된 요청입니다");
 			return new ResponseEntity<>(json.toString(), headers, HttpStatus.BAD_REQUEST);	

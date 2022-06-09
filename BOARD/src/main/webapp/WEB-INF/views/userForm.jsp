@@ -97,27 +97,27 @@
 			<input type="button" name="idCheck" id="idCheck" class="checkBtn" value="확인">		
 		</div>
 	
-		<input class="input-field" type="text" name="id" id="id" placeholder="5~30자리의 영대소문자와 숫자 조합" required value="${user.id}" ${sessionScope.id == null ? "":"readonly"}>
+		<input class="input-field" type="text" name="id" id="id" autocomplete="off" placeholder="5~30자리의 영대소문자와 숫자 조합" required value="${user.id}" ${sessionScope.id == null ? "":"readonly"}>
 		<label for="pwd">비밀번호</label>
-		<input class="input-field" type="text" name="pwd" id="pwd" placeholder="5~30자리의 영대소문자와 숫자 조합" required value="${user.pwd}">
+		<input class="input-field" type="text" name="pwd" id="pwd" autocomplete="off" placeholder="5~30자리의 영대소문자와 숫자 조합" required value="${user.pwd}">
 		<label for="name">이름</label>
-		<input class="input-field" type="text" name="name" id="name" placeholder="홍길동" required value="${user.name}">
+		<input class="input-field" type="text" name="name" id="name" autocomplete="off" placeholder="홍길동" required value="${user.name}">
 		<label for="phone">휴대폰</label>
-		<input class="input-field" type="text" name="phone" id="phone" placeholder="-없이" value="${user.phone}"> 
+		<input class="input-field" type="text" name="phone" id="phone" autocomplete="off" placeholder="-없이" value="${user.phone}"> 
 			
 		<div style="width:300px; height:40px;">
 			<label for="email">이메일</label>
 			<input type="button" name="emailCheck" id="emailCheck" class="checkBtn" value="확인">
 			<input type="button" name="emailModify" id="emailModify" class="checkBtn" value="수정" style="display:none;">
 		</div>
-		<input class="input-field" type="text" name="email" id="email" placeholder="example@naver.co.kr" value="${user.email}"> 
+		<input class="input-field" type="text" name="email" id="email" autocomplete="off" placeholder="example@naver.co.kr" value="${user.email}"> 
 		<div id="email-Auth" style="display:none;">
 			<input type="text" name="emailAuthNum" id="emailAuthNum">
 			<input type="button" id="btnEmailAuth" class="checkBtn" name="btnEmailAuth" value="인증" >
 		</div>
 		
 		<label for="birth">생일</label>
-		<input class="input-field" type="text" name="birth" id="birth" placeholder="2020-12-31" value=<fmt:formatDate value="${user.birth}" pattern="yyyy-MM-dd" type="date"/>>
+		<input class="input-field" type="text" name="birth" id="birth" autocomplete="off" placeholder="2020-12-31" value=<fmt:formatDate value="${user.birth}" pattern="yyyy-MM-dd" type="date"/>>
 		 	
 		<button type="button" id="btnSave">저 장</button>
 		<button type="button" id="btnBack" onclick="history.go(-1)">돌아가기</button>
@@ -177,7 +177,7 @@
    	   				url: "<c:url value='/user/remove?id="+id+"'/>",
    	   				headers: {"content-type" : "application/json; charset=UTF-8"},
    	   				success: function(result){
-   	   					if (isSuccess == "Y"){
+   	   					if (result.isSuccess == "Y"){
    	   						alert("회원탈퇴에 성공하셨습니다.");		
    	   						location.href = "/board/";
    	   					}
@@ -277,9 +277,9 @@
 						document.getElementById("email").readOnly = true;
 						document.getElementById("emailCheck").disabled = true;
 						document.getElementById("email-Auth").style.display = "block";						
-						alert("메일발송에 성공했습니다");      			
+						alert("인증메일이 발송되었습니다");      			
         			}else{
-        				alert("메일발송에 실패했습니다");		
+        				alert("인증메일 발송에 실패했습니다");		
         			}
         		},
         		error: function(result){
@@ -308,6 +308,7 @@
         		url: url,
         		success: function(result){
         			let obj = JSON.parse(result);
+        			alert()
         			if (obj.isSuccess == "Y"){
         				alert("인증이 완료되었습니다");
         				document.getElementById("email-Auth").style.display = "none";

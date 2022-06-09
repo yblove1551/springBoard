@@ -377,6 +377,13 @@
     }
     
     function replyModifyBtnClick(){
+    	let prno = document.querySelector('#reply-parent-rno').value;
+    	let paramObj = {
+    	      	bno :  document.getElementById("bno").value,
+    	      	rno : document.querySelector('#reply-rno').value,
+    	      	reply : document.querySelector('#reply-textarea').value,
+    	      	prno : prno == "" ? "0" : prno   
+    	}
       	$.ajax({
       		type: "POST",
       		headers: {"content-type":"application/json; charset=utf8"}, 

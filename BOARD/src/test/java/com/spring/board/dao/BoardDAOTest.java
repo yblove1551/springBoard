@@ -11,25 +11,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.spring.board.domain.Board;
 import com.spring.board.domain.Reply;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/spring/root-context.xml"})
 public class BoardDAOTest {
 	@Autowired
-	private ReplyDAO replyDAO;
-	
+	private ReplyDAO replyDAO;	
+	@Autowired
+	private BoardDAO boardDAO;	
+
 	@Test
-	@Ignore
 	public void insert() throws Exception{
-		Reply reply = new Reply();
-		
-		
-		for (int i=0; i<5; i++) {
-			reply.setBno(7);
-			reply.setReply("리턴값은2222?");
-			reply.setReplyer("test444");	
-			replyDAO.insert(reply);			
+		Board board = new Board();
+	
+		for (int i=1; i<150; i++) {
+			board.setContent("내용" + i);
+			board.setTitle("제목" + i);
+			board.setWriter("test123");
+			boardDAO.insert(board);		
+			System.out.println("test");
 		}
 
 	}
@@ -51,6 +53,7 @@ public class BoardDAOTest {
 	}	
 	
 	@Test
+	@Ignore
 	
 	public void deleteTest() throws Exception{
 //		assertTrue(replyDAO.deleteByRnoAndReplyer(-1, "test123") == 0);

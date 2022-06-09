@@ -84,21 +84,19 @@ public class UserController {
 	
 	@PostMapping("/remove")
 	@ResponseBody
-	public ResponseEntity<String> remove(@RequestParam String id, HttpSession session) {		
+	public ResponseEntity<String> remove(@RequestParam String id, HttpSession session) throws Exception {		
 		JSONObject obj = new JSONObject(); 
 		obj.put("isSuccess", "N");
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.add("Content-Type", "application/json; charset=UTF-8");
 				
-		try {
-			if (userService.removeUser(id) > 0) {
-				obj.put("isSuccess", "Y");	
-				session.invalidate();
-				return new ResponseEntity<String>(obj.toString(), responseHeaders, HttpStatus.OK);		
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}	
+	
+		if (userService.removeUser(id) > 0) {
+			obj.put("isSuccess", "Y");	
+			session.invalidate();
+			return new ResponseEntity<String>(obj.toString(), responseHeaders, HttpStatus.OK);		
+		}
+
 		obj.put("msg", "오류가 발생했습니다.");
 		return new ResponseEntity<String>(obj.toString(), responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);	
 	}
