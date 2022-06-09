@@ -60,6 +60,12 @@
     }
   </style>
 </head>
+<script>
+	let msg = "${param.msg}";
+	if (msg != ""){
+		alert(msg);	
+	}
+</script>
 <body>
 	<div id="menu">
 	    <ul>
@@ -73,7 +79,6 @@
 	<form>
 		<h3 id="title">Login</h3>
 		<div id="msg">
-
 		</div>
 		<input type="text" 		id="id"     name="id" 	value="${cookie.id.value}" placeholder="이메일 입력"  required ${empty cookie.id.value ? "autofocus" : ""}>
 		<input type="password" 	id="pwd" 	name="pwd" 	placeholder="비밀번호" required ${not empty cookie.id.value ? "autofocus" : ""}>

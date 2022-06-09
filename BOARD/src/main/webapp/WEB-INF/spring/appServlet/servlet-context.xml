@@ -25,6 +25,15 @@
 	
 	<view-controller path="/" view-name="index"/>
 	
+ 	<interceptors>
+		<interceptor>
+			<mapping path="/board/*"/>
+			<mapping path="/reply/*"/>
+			<mapping path="/user/modify"/>
+			<mapping path="/user/remove"/>
+			<beans:bean id="loginInterceptor" class="com.spring.board.interceptor.LoginInterceptor"/>		
+		</interceptor>
+	</interceptors>
 	
 	
 </beans:beans>

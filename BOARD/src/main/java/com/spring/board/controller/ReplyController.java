@@ -28,6 +28,7 @@ import com.spring.board.service.ReplyService;
 public class ReplyController{
 	final ReplyService replyService;
 	final BoardService boardService;
+	
 	public ReplyController(ReplyService replyService, BoardService boardService) {
 		this.replyService = replyService;
 		this.boardService = boardService;
@@ -40,8 +41,6 @@ public class ReplyController{
 			throw new Exception("board not found");
 		
 		List<Reply> replyList = replyService.searchByBnoHierarchical(bno);
-		
-		System.out.println(replyList);
 		
 		JSONObject json = new JSONObject();
 		json.put("isSuccess", "Y");
@@ -57,75 +56,81 @@ public class ReplyController{
 	
 	@PostMapping("/add")
 	@ResponseBody
-	public ResponseEntity<String> add(@RequestBody Reply reply, HttpSession session) throws Exception{
-		String sessionId = (String)session.getAttribute("id"); 
-		if (sessionId == null) 
-			throw new Exception("invalid Session");		
-		
-		if (reply.getBno() == null)
-			throw new Exception("invalid value");
-	
-		if (boardService.searchNotIncViewCnt(reply.getBno()) == null)
-			throw new Exception("board not found");
-		
-		reply.setReplyer(sessionId);
-		
-		if (replyService.add(reply) <= 0){
-			throw new Exception("reply add error");
-		}
+	public ResponseEntity<String> add(@RequestBody Reply reply, HttpSession session) throws Exception{	
 		JSONObject json = new JSONObject();
-		json.put("isSuccess", "Y");	
+		json.put("isSuccess", "N");	
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Content-Type", "application/json; charset=UTF-8");
+		
+		if (reply.getBno() == null) {
+			json.put("msg", "잘못된 요청입니다");
+			return new ResponseEntity<>(json.toString(), headers, HttpStatus.BAD_REQUEST);	
+		}
+	
+		if (boardService.searchNotIncViewCnt(reply.getBno()) == null) {
+			json.put("msg", "없거나 삭제된 게시글입니다.");
+			return new ResponseEntity<>(json.toString(), headers, HttpStatus.BAD_REQUEST);	
+		}
+		
+		reply.setReplyer((String)session.getAttribute("id"));
+		
+		if (replyService.add(reply) <= 0){
+			json.put("msg", "댓글 추가중 에러가 발생했습니다.");
+			return new ResponseEntity<>(json.toString(), headers, HttpStatus.INTERNAL_SERVER_ERROR);	
+		}
+		json.put("isSuccess", "Y");
 		return new ResponseEntity<>(json.toString(), headers, HttpStatus.OK);		
 	} 
 	
 	@PostMapping("/modify")
 	public ResponseEntity<String> modify(@RequestBody Reply reply, HttpSession session) throws Exception{
-	System.out.println(reply);
-		String sessionId = (String)session.getAttribute("id"); 
-		if (sessionId == null) 
-			throw new Exception("invalid session");	
+		JSONObject json = new JSONObject();
+		json.put("isSuccess", "N");	
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Content-Type", "application/json; charset=UTF-8");	
 		
-		if (reply.getRno() == null)
-			throw new Exception("invalid value");
-		
-		if (replyService.searchByRno(reply.getRno()) == null)
-			throw new Exception("reply not found");
+		if (reply.getBno() == null) {
+			json.put("msg", "잘못된 요청입니다");
+			return new ResponseEntity<>(json.toString(), headers, HttpStatus.BAD_REQUEST);	
+		}
 		
 		if (replyService.modify(reply) <= 0){
-			throw new Exception("reply modify error");
+			json.put("msg", "삭제되거나 없는 게시물입니다.");
+			return new ResponseEntity<>(json.toString(), headers, HttpStatus.BAD_REQUEST);
 		}
 	
-		JSONObject json = new JSONObject();
 		json.put("isSuccess", "Y");	
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("Content-Type", "application/json; charset=UTF-8");
 		return new ResponseEntity<>(json.toString(), headers, HttpStatus.OK);		
 	} 
 	
 	@PostMapping("/remove")
 	public ResponseEntity<String> remove(@RequestParam Integer rno, HttpSession session) throws Exception{
-		String sessionId = (String)session.getAttribute("id"); 
-		if (sessionId == null) 
-			throw new Exception("invalid Session");	
-
-		Reply reply = replyService.searchByRno(rno);
-		
-		if (reply == null) 
-			throw new Exception("not found reply");
-		else if (!reply.getReplyer().equals(sessionId))
-			throw new Exception("not authorized");
-		
-		if (replyService.removeByRnoAndReplyer(rno, sessionId) <= 0){
-			throw new Exception("reply remove error");
-		}
-	
 		JSONObject json = new JSONObject();
-		json.put("isSuccess", "Y");	
+		json.put("isSuccess", "N");	
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Content-Type", "application/json; charset=UTF-8");
-		return new ResponseEntity<>(json.toString(), headers, HttpStatus.OK);		
+		
+		String sessionId = (String)session.getAttribute("id"); 
+
+		Reply reply = replyService.searchByRno(rno);
+		if (reply == null) {
+			json.put("msg", "삭제되거나 없는 게시물입니다.");
+			return new ResponseEntity<>(json.toString(), headers, HttpStatus.BAD_REQUEST);				
+		}
+		
+		if (!reply.getReplyer().equals(sessionId)){
+			json.put("msg", "권한이 없습니다.");
+			return new ResponseEntity<>(json.toString(), headers, HttpStatus.BAD_REQUEST);			
+		}
+		
+		if (replyService.removeByRnoAndReplyer(rno, sessionId) <= 0){
+			json.put("msg", "삭제중 에러가 발생했습니다");
+			return new ResponseEntity<>(json.toString(), headers, HttpStatus.INTERNAL_SERVER_ERROR);	
+		}
+	
+		json.put("isSuccess", "Y");
+		return new ResponseEntity<>(json.toString(), headers, HttpStatus.OK);
+		
 	} 
 
 }

@@ -193,10 +193,9 @@
         
         
         $("#idCheck").on("click", function(){
-            let id = document.querySelector("#id").value;
-            
-            if (id.length < 3){
-                setMessage('id의 길이는 3이상이어야 합니다.', id);
+            let id = document.getElementById("id").value;      
+            if (id.length < 3 || id.length > 15){
+                setMessage('아이디 길이는 4~15자여야 합니다.', id);
                 return;
             }
             
@@ -222,11 +221,21 @@
 	
 
         $("#emailCheck").on("click", function(){
-            let email = document.querySelector("#email").value;
-            if (email.trim() == "")
-            	setMessage('이메일을 입력해주세요.', id);
+            let email = document.querySelector("#email");
+            let regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
+
+            if (email.value.trim() == ""){
+            	setMessage('이메일을 입력해주세요.', email);
+            	return;
+            }
+
+            let emailVal = email.value;
+          	if (!regEmail.test(emailVal)){
+          		setMessage('이메일 형식이 맞지 않습니다.', email);
+          		return;
+          	}  
             
-          	let url = "<c:url value='/user/email?email="+email+"'/>";
+          	let url = "<c:url value='/user/email?email="+email.value+"'/>";
         	 
         	$.ajax({
         		type: "GET",
@@ -327,11 +336,32 @@
        function formCheck(frm) {
             var msg ='';
 
-            if(frm.id.value.length<3) {
-                setMessage('id의 길이는 3이상이어야 합니다.', frm.id);
+            let idVal = frm.id.value;
+            if(idVal.length < 4 || idVal.length > 15) {
+                setMessage('아이디 길이는 4~15자여야 합니다..', frm.id);
                 return false;
             }
             
+            
+            let pwdVal = frm.pwd.value;	     
+            if (pwdVal.length < 3 || pwdVal.length > 15){
+                setMessage('비밀번호 길이는 4~15자여야 합니다.', frm.pwd);
+                return;
+            }
+            
+            let regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
+            let emailVal = frm.email.value;
+          	if (!regEmail.test(emailVal)){
+          		setMessage('이메일 형식이 맞지 않습니다.', frm.email);
+          		return;
+          	}  
+          	
+            let nameVal = frm.name.value;	     
+            if (nameVal.length < 2 || nameVal.length > 30){
+                setMessage('이름은 2~30자 사이입니다.', frm.name);
+                return;
+            }         	
+                      
             if (!document.getElementById("idCheck").disabled){
                 setMessage('아이디 확인이 필요합니다.', document.getElementById("idCheck"));
                 return false;            	

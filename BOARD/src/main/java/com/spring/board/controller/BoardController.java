@@ -45,14 +45,10 @@ public class BoardController {
 	
 	@GetMapping("/list")
 	public String getBoardList(HttpServletRequest request, HttpSession session, BoardSelector boardSelector, Model m, String msg) {
-		if (session.getAttribute("id") == null)
-			return "redirect:/login/login?toURL=/board/list";
-				
 		List<Board> boardList = null;
 	
 		Map<String, ?> flashMap =RequestContextUtils.getInputFlashMap(request);
 		msg = flashMap != null ?  (String)flashMap.get("msg") : "";
-		System.out.println("msg:" + msg);
 		
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -76,7 +72,7 @@ public class BoardController {
 	}
 	
 	@GetMapping("/board")
-	public String getBoard(Integer bno, BoardSelector boardSelector, RedirectAttributes rattr,   Model m) {
+	public String getBoard(@RequestParam Integer bno, BoardSelector boardSelector, RedirectAttributes rattr,   Model m) {
 		try {
 			Board board = boardService.search(bno);	
 			if (board == null) {
@@ -135,11 +131,6 @@ public class BoardController {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Content-Type", "application/json; charset=UTF-8");
 		
-		if (session.getAttribute("id") == null) {
-			JSONObject sub = new JSONObject();
-			obj.put("msg", "세션이 유효하지 않습니다");
-			return new ResponseEntity<>(obj.toString(), headers, HttpStatus.BAD_REQUEST); 
-		}
 		String id = (String)session.getAttribute("id");
 		try {
 			if (boardService.removeByWriterAndBno(id, bno) > 0) {
@@ -164,10 +155,6 @@ public class BoardController {
 		headers.add("Content-Type", "application/json; charset=UTF-8");
 		
 		String id = (String)session.getAttribute("id");
-		if (id == null) {
-			obj.put("obj", "세션이 유효하지 않습니다");
-			return new ResponseEntity<>(obj.toString(), headers, HttpStatus.BAD_REQUEST); 
-		}
 		
 		board.setWriter(id); 
 		try {

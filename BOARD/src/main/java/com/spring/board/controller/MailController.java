@@ -56,6 +56,7 @@ public class MailController{
 	@PostMapping("/mail")
 	@ResponseBody
 	public ResponseEntity<String> sendMail(HttpServletRequest request) throws Exception {
+		removeTimeOut();
 		try {
 		//입력이 JSON
 		Map jsonMap = (Map) new JSONParser().parse(request.getReader());
@@ -104,6 +105,7 @@ public class MailController{
 	@ResponseBody
 	public ResponseEntity<String> mailAuth(@RequestParam Integer authNumber,
 											@RequestParam String email) throws Exception{
+		removeTimeOut();
 		JSONObject json = new JSONObject();
 		if (!findByEmailAndAuthNum(email, authNumber)) {
 			json.put("isSuccess", "N");
@@ -170,7 +172,6 @@ public class MailController{
 	public Integer add(String email) {
 		//인증번호생성
 		int authNum = -1;
-		
 		Set<Integer> authNumSet = mailAuthSet.stream().map(MailAuth::getAuthNumber).collect(Collectors.toSet());   
 		while(true) {
 			authNum = (int)(Math.random() * 9000 + 1000);

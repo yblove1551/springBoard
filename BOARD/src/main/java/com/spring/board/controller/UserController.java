@@ -47,9 +47,6 @@ public class UserController {
 		
 	@GetMapping("/modify")
 	public String modify(HttpSession session, HttpServletRequest request, Model m) {
-		if (session.getAttribute("id") == null) //로그인 페이지로 이동
-			return "redirect:/login/login";
-	
 		try {
 			//조회결과가 없으면 유효한 아이디가 아님 홈으로 이동
 			User user = userService.searchById((String)session.getAttribute("id")); 				
@@ -87,19 +84,12 @@ public class UserController {
 	
 	@PostMapping("/remove")
 	@ResponseBody
-	public ResponseEntity<String> remove(HttpSession session, String id) {		
+	public ResponseEntity<String> remove(@RequestParam String id, HttpSession session) {		
 		JSONObject obj = new JSONObject(); 
 		obj.put("isSuccess", "N");
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.add("Content-Type", "application/json; charset=UTF-8");
-		
-		if (id == null 
-				|| session.getAttribute("id") == null
-				||!id.equals((String)session.getAttribute("id"))){
-			obj.put("msg", "로그인이 필요합니다.");		
-			return new ResponseEntity<String>(obj.toString(), responseHeaders, HttpStatus.BAD_REQUEST);		
-		}
-		
+				
 		try {
 			if (userService.removeUser(id) > 0) {
 				obj.put("isSuccess", "Y");	
