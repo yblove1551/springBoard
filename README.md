@@ -58,7 +58,7 @@ ajax로 조회한 댓글은 오라클의 with 구문을 이용해 계층형 댓�
 ## 테이블구조
 
 
-![오라클ERD](https://user-images.githubusercontent.com/86616901/172870830-1fdf20b0-1101-458a-bb16-37c4a6b59513.PNG)
+![erd 다시](https://user-images.githubusercontent.com/86616901/172877769-13d4676d-e906-4e7a-9307-1dc1d67ae397.JPG)
 
 ## 회원 등록
 https://blog.naver.com/yblove1551/222766628121
