@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.board.dao.ReplyMapper">
+ 	<sql id="selectAll"> 
+		SELECT * FROM REPLY
+		 WHERE 1=1
+ 	</sql>
+ 	
+	<select id="selectByBnoHierarchical" parameterType="int" resultType="Reply">
+		SELECT  rno, 		bno, 		prno,  		reply,	 
+				replyer, 	reg_date, 	up_date, 	level	
+		FROM REPLY 											
+		START WITH PRNO = 0 AND BNO = #{value} 					
+		CONNECT BY PRIOR RNO = PRNO 						
+		ORDER SIBLINGS BY RNO 		
+	</select>
+	
+	<select id="selectByRno" parameterType="int" resultType="Reply">
+		<include refid="selectAll"/>
+		AND rno = #{value}
+	</select>
+
+ 	<insert id="insert" parameterType = "Reply">
+		<selectKey keyProperty="rno" resultType="int" order="AFTER"> 
+			SELECT REPLY_SEQ.CURRVAL FROM DUAL 
+		</selectKey> 
+			INSERT INTO REPLY        	 		 
+			(rno,		bno,	 	prno,     	 
+			 reply,	 	replyer, 	reg_date, 	 
+			 up_date)                			 
+			VALUES                    			 
+			(REPLY_SEQ.NEXTVAL, #{bno}, #{prno}, #{reply}, #{replyer}, sysdate, 
+			 sysdate) 
+	        		 		     		
+ 	</insert>
+ 	
+ 	<delete id="deleteByRnoAndReplyer" parameterType="map">
+			DELETE FROM REPLY 							
+			WHERE rno IN (    							
+				SELECT rno FROM REPLY					
+				START WITH rno = #{rno} AND replyer = #{replyer}		
+				CONNECT BY PRIOR rno = prno				
+				)										
+ 	</delete>
+ 	
+ 	 <delete id="deleteByReplyer" parameterType="String">
+			DELETE FROM REPLY 							
+			WHERE rno IN (    							
+				SELECT rno FROM REPLY					
+				START WITH replyer = #{value}		
+				CONNECT BY PRIOR rno = prno				
+				)										
+ 	</delete>
+ 	
+ 	<delete id="deleteByBno" parameterType="int">
+		DELETE FROM REPLY WHERE bno = #{value}
+ 	</delete>
+ 	  	
+ 	<update id="update" parameterType="Reply">
+		UPDATE REPLY              
+		SET reply = #{reply}             
+		   ,up_date = sysdate     
+		WHERE rno = #{rno}
+ 	</update>
+ 	
+</mapper>

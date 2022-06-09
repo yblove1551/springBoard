@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- settings태그는 가장 위에 위치 -->
+   <settings>     
+     <setting name="jdbcTypeForNull" value="NULL" />
+   </settings>
+    <typeAliases>
+        <!--typeAlias alias는 대소문자 구별 안함-->
+        <typeAlias alias="Board" type="com.spring.board.domain.Board"/>
+        <typeAlias alias="BoardSelector" type="com.spring.board.domain.BoardSelector"/>
+        <typeAlias alias="Mail" type="com.spring.board.domain.Mail"/>
+        <typeAlias alias="MailTemplete" type="com.spring.board.domain.MailTemplete"/>
+        <typeAlias alias="Reply" type="com.spring.board.domain.Reply"/>
+        <typeAlias alias="User" type="com.spring.board.domain.User"/>
+        <typeAlias alias="MailKeyword" type="com.spring.board.domain.MailKeyword"/>
+    </typeAliases>
+    
+
+</configuration>

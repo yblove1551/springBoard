@@ -1,0 +1,7 @@
+eclipse.preferences.version=1
+encoding//src/main/java/com/spring/board/common/CommonResource.java=UTF-8
+encoding//src/main/java/com/spring/board/controller/UserController.java=UTF-8
+encoding//src/main/java/com/spring/board/dao/BoardDAO.java=UTF-8
+encoding//src/main/java/com/spring/board/dao/ReplyDAO.java=UTF-8
+encoding//src/main/java/com/spring/board/dao/UserDAO.java=UTF-8
+encoding//src/main/java/com/spring/board/domain/BoardSelector.java=UTF-8

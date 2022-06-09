@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.board.dao.MailMapper">
+ 	<sql id="selectAll"> 
+		SELECT * FROM MAIL_LOG WHERE 1=1
+ 	</sql>
+ 	 	
+ 	<select id="selectByReceiver" parameterType="String" resultType="Mail">
+		<include refid="selectAll"/>
+		AND receiver = #{value}
+ 	</select>
+ 	
+ 	<select id="selectBySender" parameterType="String" resultType="Mail">
+		<include refid="selectAll"/>
+		AND sender = #{value}
+ 	</select>
+ 	
+ 	<select id="selectBySenderEmail" parameterType="String" resultType="Mail">
+		<include refid="selectAll"/>
+		AND sender_email = #{value}
+ 	</select>
+ 	
+ 	<select id="selectByReceiverEmail" parameterType="String" resultType="Mail">
+		<include refid="selectAll"/>
+		AND receiver_email = #{value}
+ 	</select>
+ 		
+ 	<insert id="insert" parameterType="Mail">
+ 		<selectKey keyProperty="seq" resultType="int" order="AFTER">
+ 			SELECT MAIL_SEQ.CURRVAL FROM DUAL 
+ 		</selectKey> 
+ 		<![CDATA[
+			INSERT INTO MAIL_LOG          									
+				(seq, 				kind, 			sender, 	sender_email,	
+				 receiver, 			receiver_email, title, 		content, 	  	
+				 send_time,			success,		err_msg)					
+			VALUES                                                    	    
+				(MAIL_SEQ.NEXTVAL, 	#{kind}, 		#{sender},	#{sender_email},			
+				 #{receiver}, 		#{receiver_email},#{title}, #{content},			
+				 sysdate, 			#{success}, 	#{err_msg}) 		
+ 		]]>
+	</insert>
+ 	
+ 	<sql id="delete">
+ 		DELETE FROM MAIL_LOG WHERE 1=1
+ 	</sql>
+ 	
+ 	 <delete id="delete">
+ 		<include refid="delete"/>
+ 		AND seq IN 
+ 		<foreach item="i" open="(" separator="," close=")" collection="list">
+ 			#{i}
+ 		</foreach>
+ 	</delete>
+</mapper>

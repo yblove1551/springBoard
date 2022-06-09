@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.board.dao.UserMapper">
+ 	<sql id="selectAll"> 
+ 	SELECT ID, PWD, NAME, EMAIL, BIRTH, PHONE, REG_DATE FROM JUNG.USER_INFO
+ 	WHERE 1=1
+ 	</sql>
+ 	
+ 	<select id="selectById" parameterType="String" resultType="User">
+ 		<include refid="selectAll"/>
+ 			AND id = #{value} 		
+ 	</select>
+ 	
+ 	 <select id="selectByIdAndPwd" parameterType="map" resultType="User">
+ 		<include refid="selectAll"/>
+ 			AND id = #{id} 
+ 			AND pwd = #{pwd} 		
+ 	</select>
+ 	
+ 	<select id="selectByEmail" parameterType="String" resultType="User">
+ 		<include refid="selectAll"/>
+ 			AND email = #{value} 	
+ 			AND ROWNUM = 1
+ 	</select>
+ 	
+ 	<select id="selectByEmailAndName" parameterType="map" resultType="User">
+ 		<include refid="selectAll"/>
+ 			AND email = #{email} 
+ 			AND name = #{name} 		
+ 	</select>
+ 	
+ 	<insert id="insert" parameterType="User">
+		INSERT INTO USER_INFO   
+			(id,	pwd,	name,   email,	birth,	phone,  reg_date)              
+		VALUES                  
+			(#{id},	#{pwd},	#{name}, #{email}, #{birth}, #{phone}, sysdate)       		
+ 	</insert>
+ 	
+ 	<delete id="deleteById" parameterType="String">
+ 		DELETE FROM USER_INFO
+ 		WHERE id = #{value}
+ 	</delete>
+  	
+ 	<update id="update" parameterType="User">
+ 		UPDATE USER_INFO
+ 		SET pwd = #{pwd}
+ 		  , name = #{name}
+ 		  , email = #{email}
+ 		  , birth = #{birth}
+ 		  , phone = #{phone}
+ 		WHERE id = #{id}
+ 	</update>
+ 	
+ 	<update id="updatePwd" parameterType="map">
+ 		UPDATE USER_INFO
+ 		SET pwd = #{pwd}
+ 		WHERE id = #{id}
+ 	</update>
+</mapper>
